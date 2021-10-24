@@ -88,6 +88,19 @@ async function acceptUnidirectionalStreams(){
     }
 }
 
+async function readFromIncomingStream(readble, number){
+    try{
+        const decoder = new TextDecoderStream('utf-8');
+        for await (const chunk of readble.pipeThrough(decoder)){
+            addToEventLog(`Received data on stream #${number}:${chunl}`);
+        }
+        addToEventLog(`Stream #${number} closed`);
+    }catch(e){
+        addToEventLog(`Error while reading from stream #${number}:${e}`, 'error');
+        addToEventLog(`     ${e.message}`);
+    }
+}
+
 function addToEventLog(text, severity = 'info'){
     const log = document.getElementById('event-log');
     const previous = log.lastElementChild;
